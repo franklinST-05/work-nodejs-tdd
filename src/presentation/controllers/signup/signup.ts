@@ -12,7 +12,7 @@ export class SignUpController implements Controller {
         this.addAcount = addAcount;
     }
 
-    handle(httpRequest: HttpRequest): HttpResponse {
+    async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
 
         try {
 
@@ -36,7 +36,7 @@ export class SignUpController implements Controller {
 
             }
 
-            const account = this.addAcount.run({
+            const account = await this.addAcount.run({
                 name,
                 email,
                 password
