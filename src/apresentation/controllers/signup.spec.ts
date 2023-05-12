@@ -55,7 +55,7 @@ describe('controller:signup', () => {
     });
 
     test('should returns 400 if invalid email is provided', () => {
-        const { sut, emailValidatorStub  } = makeSUT();
+        const { sut, emailValidatorStub } = makeSUT();
         vitest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false);
 
         const httpRequest: HttpRequest = {
@@ -72,7 +72,7 @@ describe('controller:signup', () => {
     });
 
     test('should call EmailValidator with correct email', () => {
-        const { sut, emailValidatorStub  } = makeSUT();
+        const { sut, emailValidatorStub } = makeSUT();
         const emailValidatorSpy = vitest.spyOn(emailValidatorStub, 'isValid');
 
         const httpRequest: HttpRequest = {
@@ -83,7 +83,7 @@ describe('controller:signup', () => {
                 confirmPassword: 'qwe123'
             }
         };
-        
+
         sut.handle(httpRequest);
         expect(emailValidatorSpy).toBeCalledWith(httpRequest.body.email);
     });
@@ -146,6 +146,24 @@ describe('controller:signup', () => {
         };
         const httpResponse = sut.handle(httpRequest);
         expect(httpResponse.statusCode).toBe(200);
+    });
+
+    test('should returns 500 if EmailValidator throws', () => {
+        const { sut, emailValidatorStub } = makeSUT();
+        vitest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+            throw new Error('--error--');
+        });
+
+        const httpRequest: HttpRequest = {
+            body: {
+                name: 'John Doe',
+                email: 'johndoe@gmail.com',
+                password: 'qwe123',
+                confirmPassword: 'qwe123'
+            }
+        };
+        const httpResponse = sut.handle(httpRequest);
+        expect(httpResponse.statusCode).toBe(500);
     });
 
 });

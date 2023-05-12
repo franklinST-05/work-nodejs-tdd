@@ -1,3 +1,4 @@
+import { error } from 'console';
 import { InvalidParamError, MissingParamError } from '../errors';
 import { badRequest } from '../helpers/http-helper';
 import { Controller } from '../protocols/controller';
@@ -14,26 +15,35 @@ export class SignUpController implements Controller {
 
     handle(httpRequest: HttpRequest): HttpResponse {
 
-        const fields = ['name', 'email', 'password', 'confirmPassword'];
+        try {
 
-        for (const field of fields) {
+            const fields = ['name', 'email', 'password', 'confirmPassword'];
 
-            if (!httpRequest.body[field]) {
-                return badRequest(new MissingParamError(field));
+            for (const field of fields) {
+
+                if (!httpRequest.body[field]) {
+                    return badRequest(new MissingParamError(field));
+                }
             }
+
+            if (httpRequest.body.password != httpRequest.body.confirmPassword) {
+                return badRequest(new InvalidParamError('confirmPassword'));
+            }
+
+            if (!this.emailValidator.isValid(httpRequest.body.email)) {
+                return badRequest(new InvalidParamError('email'));
+
+            }
+
+            return {
+                statusCode: 200,
+            };
+            
+        } catch (error) {
+            return {
+                statusCode: 500,
+                body: error
+            };
         }
-
-        if (httpRequest.body.password != httpRequest.body.confirmPassword) {
-            return badRequest(new InvalidParamError('confirmPassword'));
-        }
-
-        if (!this.emailValidator.isValid(httpRequest.body.email)) {
-            return badRequest(new InvalidParamError('email'));
-
-        }
-
-        return {
-            statusCode: 200,
-        };
     }
 }
