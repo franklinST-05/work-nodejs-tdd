@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { SignUpController } from './signup';
 import { HttpRequest } from '../protocols/http';
+import { MissingParamError } from '../errors/missing-param-error';
 
 const makeSUT = () => {
     const sut = new SignUpController();
@@ -21,6 +22,7 @@ describe('controller:signup', () => {
         };
         const httpResponse = sut.handle(httpRequest);
         expect(httpResponse.statusCode).toBe(400);
+        expect(httpResponse.body).toEqual(new MissingParamError('name'));
     });
 
 });
