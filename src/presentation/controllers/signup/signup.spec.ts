@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, expect, test, vitest } from 'vitest';
 
 import { MissingParamError, InvalidParamError } from '../../errors';
@@ -175,6 +176,24 @@ describe('controller:signup', () => {
     test('should returns 500 if EmailValidator throws', () => {
         const { sut, emailValidatorStub } = makeSUT();
         vitest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+            throw new Error('--error--');
+        });
+
+        const httpRequest: HttpRequest = {
+            body: {
+                name: 'John Doe',
+                email: 'johndoe@gmail.com',
+                password: 'qwe123',
+                confirmPassword: 'qwe123'
+            }
+        };
+        const httpResponse = sut.handle(httpRequest);
+        expect(httpResponse.statusCode).toBe(500);
+    });
+
+    test('should returns 500 if EmailValidator throws', () => {
+        const { sut, addAcountStub } = makeSUT();
+        vitest.spyOn(addAcountStub, 'run').mockImplementationOnce(() => {
             throw new Error('--error--');
         });
 
