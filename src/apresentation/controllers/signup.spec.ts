@@ -134,4 +134,19 @@ describe('controller:signup', () => {
         expect(httpResponse.body).toEqual(new InvalidParamError('confirmPassword'));
     });
 
+
+    test('should returns 200 if all properties is correct', () => {
+        const { sut } = makeSUT();
+        const httpRequest: HttpRequest = {
+            body: {
+                name: 'John Doe',
+                email: 'johndoe@gmail.com',
+                password: 'qwe123',
+                confirmPassword: 'qwe123'
+            }
+        };
+        const httpResponse = sut.handle(httpRequest);
+        expect(httpResponse.statusCode).toBe(200);
+    });
+
 });
