@@ -1,6 +1,6 @@
 import { Controller, EmailValidator, AddAccount, HttpRequest, HttpResponse } from './signup-protocols';
 import { InvalidParamError, MissingParamError } from '../../errors';
-import { badRequest } from '../../helpers/http-helper';
+import { badRequest, ok, serverError } from '../../helpers/http-helper';
 
 export class SignUpController implements Controller {
 
@@ -36,21 +36,16 @@ export class SignUpController implements Controller {
 
             }
 
-            this.addAcount.run({
+            const account = this.addAcount.run({
                 name,
                 email,
                 password
             });
 
-            return {
-                statusCode: 200,
-            };
+            return ok(account);
 
         } catch (error) {
-            return {
-                statusCode: 500,
-                body: error
-            };
+            return serverError(new Error('Internal server error'));
         }
     }
 }

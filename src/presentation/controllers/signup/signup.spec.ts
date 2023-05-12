@@ -152,7 +152,7 @@ describe('controller:signup', () => {
     });
 
 
-    test('should returns 200 if all properties is correct', () => {
+    test('should to have been called with correct object', () => {
         const { sut, addAcountStub } = makeSUT();
         const addAcountSpy = vitest.spyOn(addAcountStub, 'run');
 
@@ -207,6 +207,27 @@ describe('controller:signup', () => {
         };
         const httpResponse = sut.handle(httpRequest);
         expect(httpResponse.statusCode).toBe(500);
+    });
+
+    test('should returns 200 if valid data is provided', () => {
+        const { sut } = makeSUT();
+
+        const httpRequest: HttpRequest = {
+            body: {
+                name: 'John Doe',
+                email: 'johndoe@gmail.com',
+                password: 'qwe123',
+                confirmPassword: 'qwe123'
+            }
+        };
+        const httpResponse = sut.handle(httpRequest);
+        expect(httpResponse.statusCode).toBe(200);
+        expect(httpResponse.body).toEqual({
+            id: '$id-valido',
+            name: 'John Doe',
+            email: 'johndoe@gmail.com',
+            password: 'qwe123'
+        });
     });
 
 });
