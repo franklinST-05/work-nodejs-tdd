@@ -1,10 +1,8 @@
 import { describe, expect, test, vitest } from 'vitest';
-import { SignUpController } from '../signup/signup';
-import { HttpRequest } from '../../protocols/http';
+
 import { MissingParamError, InvalidParamError } from '../../errors';
-import { EmailValidator } from '../../protocols/email-validator';
-import { AddAccount, AddAccountModel } from '../../../domain/usecases/add-account';
-import { AccountModel } from '../../../domain/models/account';
+import { SignUpController } from '../signup/signup';
+import { HttpRequest, EmailValidator, AddAccount, AddAccountModel, AccountModel } from './signup-protocols';
 
 
 const makeAddAccount = () => {
