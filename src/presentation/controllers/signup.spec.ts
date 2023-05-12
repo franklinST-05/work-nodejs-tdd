@@ -3,6 +3,24 @@ import { SignUpController } from './signup';
 import { HttpRequest } from '../protocols/http';
 import { MissingParamError, InvalidParamError } from '../errors';
 import { EmailValidator } from '../protocols/email-validator';
+import { AddAccount, AddAccountModel } from '../../domain/usecases/add-account';
+import { AccountModel } from '../../domain/models/account';
+
+
+const makeAddAccount = () => {
+    class AddAcountStub implements AddAccount {
+        run(account: AddAccountModel): AccountModel {
+            return {
+                id: '$id-valido',
+                name: 'John Doe',
+                email: 'johndoe@gmail.com',
+                password: 'qwe123'
+            };
+        }
+
+    }
+    return new AddAcountStub();
+};
 
 const makeEmailValidator = () => {
     class EmailValidatorStub implements EmailValidator {
@@ -11,14 +29,15 @@ const makeEmailValidator = () => {
         }
     }
 
-    const emailValidatorStub = new EmailValidatorStub();
-    return { emailValidatorStub };
+    return new EmailValidatorStub();
 };
 
 const makeSUT = () => {
-    const { emailValidatorStub } = makeEmailValidator();
-    const sut = new SignUpController(emailValidatorStub);
-    return { sut, emailValidatorStub };
+    const emailValidatorStub = makeEmailValidator();
+    const addAcountStub = makeAddAccount();
+
+    const sut = new SignUpController(emailValidatorStub, addAcountStub);
+    return { sut, emailValidatorStub, addAcountStub };
 };
 
 describe('controller:signup', () => {
@@ -135,7 +154,9 @@ describe('controller:signup', () => {
 
 
     test('should returns 200 if all properties is correct', () => {
-        const { sut } = makeSUT();
+        const { sut, addAcountStub } = makeSUT();
+        const addAcountSpy = vitest.spyOn(addAcountStub, 'run');
+
         const httpRequest: HttpRequest = {
             body: {
                 name: 'John Doe',
@@ -144,8 +165,13 @@ describe('controller:signup', () => {
                 confirmPassword: 'qwe123'
             }
         };
-        const httpResponse = sut.handle(httpRequest);
-        expect(httpResponse.statusCode).toBe(200);
+        sut.handle(httpRequest);
+        expect(addAcountSpy).toHaveBeenCalledWith({
+            name: httpRequest.body.name,
+            email: httpRequest.body.email,
+            password: httpRequest.body.password,
+        });
+
     });
 
     test('should returns 500 if EmailValidator throws', () => {
