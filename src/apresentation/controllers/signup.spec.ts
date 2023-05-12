@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { SignUpController } from './signup';
+import { HttpRequest } from '../protocols/http';
 
 const makeSUT = () => {
     const sut = new SignUpController();
@@ -10,7 +11,7 @@ describe('controller:signup', () => {
 
     test('should returns 400 if no name is provided', () => {
         const { sut } = makeSUT();
-        const httpRequest = {
+        const httpRequest: HttpRequest = {
             body: {
                 // name: 'John Doe',
                 email: 'johndoe@gmail.com',
