@@ -2,7 +2,7 @@
 import { describe, expect, test, vitest } from 'vitest';
 
 import { MissingParamError, InvalidParamError } from '../../errors';
-import { SignUpController } from '../signup/signup';
+import { SignUpController } from './signup';
 import { HttpRequest, EmailValidator, AddAccount, AddAccountModel, AccountModel } from './signup-protocols';
 
 
