@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, expect, test, vi, vitest } from 'vitest';
-import { EmailValidatorAdapter } from './email-validator';
+import { EmailValidatorAdapter } from './email-validator-adapter';
 import validator from 'validator';
 
 const makeSut = () => {
