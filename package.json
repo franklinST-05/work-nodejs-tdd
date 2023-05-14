@@ -5,8 +5,8 @@
   "license": "MIT",
   "scripts": {
     "test": "vitest --watch --passWithNoTests",
-    "test:unit":"yarn test --config vitest.config.unit.ts",
-    "test:integration":"yarn test --config vitest.config.integration.ts"
+    "test:unit": "yarn test -- --config vitest.config.unit.ts",
+    "test:integration": "yarn test -- --config vitest.config.integration.ts"
   },
   "devDependencies": {
     "@types/node": "^20.1.2",
