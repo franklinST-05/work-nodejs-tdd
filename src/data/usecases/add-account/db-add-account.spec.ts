@@ -85,4 +85,20 @@ describe('data-usecase:add-account', () => {
         const account = sut.run(accountData);
         expect(account).rejects.toThrow();
     });
+
+    test('should return saved AccountModel on success', async () => {
+        const { sut } = makeSut();
+        const accountData: AddAccountModel = {
+            name: 'John Doe',
+            email: 'johndoe@gmail.com',
+            password: 'qwe123',
+        };
+        const account = await sut.run(accountData);
+        expect(account).toStrictEqual({
+            id: '--ID--',
+            name: 'John Doe',
+            email: 'johndoe@gmail.com',
+            password: 'hash'
+        });
+    });
 });
