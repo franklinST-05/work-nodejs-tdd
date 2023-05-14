@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, expect, test, vi } from 'vitest';
-import { AddAccount, AddAccountModel } from '../../../domain/usecases/add-account';
-import { Encrypter } from '../../protocols/encrypter';
+import { Encrypter, AddAccount, AddAccountModel } from './db-add-account-protocols';
 import { DbAddAccount } from './db-add-account';
+
 
 const makeEncryptStub = (): Encrypter => {
     class EncryptStub implements Encrypter {
