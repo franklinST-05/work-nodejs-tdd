@@ -23,4 +23,11 @@ describe('util:email-validator', async () => {
         const isValidEmail = sut.isValid('johndoe@gmail.com');
         expect(isValidEmail).toBe(true);
     });
+
+    test('should call EmailValidator with correct email', () => {
+        const { sut } = makeSut();
+        const validatorEmail = vitest.spyOn(validator, 'isEmail');
+        sut.isValid('johndoe@gmail.com');
+        expect(validatorEmail).toHaveBeenCalledWith('johndoe@gmail.com');
+    });
 });
