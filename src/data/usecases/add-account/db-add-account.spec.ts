@@ -4,9 +4,9 @@ import { AddAccount, AddAccountModel } from '../../../domain/usecases/add-accoun
 import { Encrypter } from '../../protocols/encrypter';
 import { DbAddAccount } from './db-add-account';
 
-const makeEncryptStub = () => {
+const makeEncryptStub = (): Encrypter => {
     class EncryptStub implements Encrypter {
-        async encrypt(value:string):Promise<string> {
+        async encrypt(value: string): Promise<string> {
             return new Promise(resolve => resolve('hash'));
         }
     }
@@ -14,9 +14,9 @@ const makeEncryptStub = () => {
     return new EncryptStub();
 };
 
-const makeSut = () => {
+const makeSut = (): { sut: AddAccount, encryptStub: Encrypter } => {
     const encryptStub = makeEncryptStub();
-    const sut:AddAccount = new DbAddAccount(encryptStub);
+    const sut: AddAccount = new DbAddAccount(encryptStub);
     return { sut, encryptStub };
 };
 
@@ -24,7 +24,7 @@ describe('data-usecase:add-account', () => {
     test('should call Encrypter with correct password', () => {
         const { sut, encryptStub } = makeSut();
         const encryptSpy = vi.spyOn(encryptStub, 'encrypt');
-        const accountData:AddAccountModel = {
+        const accountData: AddAccountModel = {
             name: 'John Doe',
             email: 'joedoe@gmail.com',
             password: 'qwe123',
