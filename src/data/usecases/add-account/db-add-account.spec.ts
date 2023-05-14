@@ -73,4 +73,16 @@ describe('data-usecase:add-account', () => {
         await sut.run(accountData);
         expect(addAccountRepositorySpy).toHaveBeenCalledWith(Object.assign({}, accountData, { password: 'hash' }));
     });
+
+    test('should throw if AddAccountRepository throws', () => {
+        const { sut, addAccountRepositoryStub } = makeSut();
+        vi.spyOn(addAccountRepositoryStub, 'add').mockReturnValueOnce(new Promise((_, reject) => reject(new Error('--ERROR--'))));
+        const accountData: AddAccountModel = {
+            name: 'John Doe',
+            email: 'johndoe@gmail.com',
+            password: 'qwe123',
+        };
+        const account = sut.run(accountData);
+        expect(account).rejects.toThrow();
+    });
 });
