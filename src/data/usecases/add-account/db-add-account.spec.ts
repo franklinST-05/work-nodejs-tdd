@@ -32,4 +32,16 @@ describe('data-usecase:add-account', () => {
         sut.run(accountData);
         expect(encryptSpy).toHaveBeenCalledWith(accountData.password);
     });
+
+    test('should throw if Encryoter throws', () => {
+        const { sut, encryptStub } = makeSut();
+        vi.spyOn(encryptStub, 'encrypt').mockReturnValueOnce(new Promise((_, reject) => reject(new Error('--ERROR--'))));
+        const accountData: AddAccountModel = {
+            name: 'John Doe',
+            email: 'joedoe@gmail.com',
+            password: 'qwe123',
+        };
+        const account = sut.run(accountData);
+        expect(account).rejects.toThrow();
+    });
 });
