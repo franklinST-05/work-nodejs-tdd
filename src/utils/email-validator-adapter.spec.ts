@@ -1,15 +1,26 @@
-import { describe, expect, test } from 'vitest';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { describe, expect, test, vi, vitest } from 'vitest';
 import { EmailValidatorAdapter } from './email-validator';
+import validator from 'validator';
 
 const makeSut = () => {
-    const sut = new EmailValidatorAdapter();
-    return { sut };
+    return {
+        sut: new EmailValidatorAdapter(),
+    };
 };
 
-describe('util:email-validator', () => {
+describe('util:email-validator', async () => {
     test('should return false if invalid email is provided', () => {
         const { sut } = makeSut();
+        vitest.spyOn(validator, 'isEmail').mockReturnValueOnce(false);
         const isValidEmail = sut.isValid('--INVALID--');
         expect(isValidEmail).toBe(false);
+    });
+
+    test('should return true if valid email is provided', () => {
+        const { sut } = makeSut();
+        vitest.spyOn(validator, 'isEmail').mockReturnValueOnce(true);
+        const isValidEmail = sut.isValid('johndoe@gmail.com');
+        expect(isValidEmail).toBe(true);
     });
 });
