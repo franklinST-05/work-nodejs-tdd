@@ -2109,7 +2109,7 @@ mongodb-memory-server-core@8.12.2:
     uuid "^9.0.0"
     yauzl "^2.10.0"
 
-mongodb-memory-server@^8.12.0:
+mongodb-memory-server@^8.12.0, mongodb-memory-server@^8.12.2:
   version "8.12.2"
   resolved "https://registry.yarnpkg.com/mongodb-memory-server/-/mongodb-memory-server-8.12.2.tgz#09d7f7fb7877d309c486f3e703390633bfd137f4"
   integrity sha512-WM3uJnKWqhJxu3LlHfvRXRrhc+kiEGdGDHMrAG0N1E2fWbRlvSnUKau7Jdcf7cIA5HlRC/K8uVe0DCym45KfAA==

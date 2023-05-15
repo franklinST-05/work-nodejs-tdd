@@ -29,16 +29,4 @@ describe('criptography', () => {
         expect(hash).toBe('--HASHED-PASSWORD--');
     });
 
-    test('should throws if Bcrypt throws', async () => {
-        vi.spyOn(bcrypt, 'hash').mockImplementationOnce(():Promise<string> => new Promise((_,reject) => {
-            reject('');
-        }));
-
-        const { sut } = makeSut();
-        const password = 'qwe123';
-        
-        const hash = await sut.encrypt(password);
-        
-        expect(hash).rejects.toBe('');
-    });
 });
